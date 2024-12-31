@@ -1,0 +1,50 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v2_1.xml" */
+/*-Specials-*/
+define symbol __ICFEDIT_intvec_start__ = 0x10000000;
+/*-Memory Regions-*/
+define symbol __ICFEDIT_region_IROM1_start__ = 0x10000000;
+define symbol __ICFEDIT_region_IROM1_end__   = 0x10FFFFFF;
+define symbol __ICFEDIT_region_IROM2_start__ = 0x0;
+define symbol __ICFEDIT_region_IROM2_end__   = 0x0;
+define symbol __ICFEDIT_region_EROM1_start__ = 0x0;
+define symbol __ICFEDIT_region_EROM1_end__   = 0x0;
+define symbol __ICFEDIT_region_EROM2_start__ = 0x0;
+define symbol __ICFEDIT_region_EROM2_end__   = 0x0;
+define symbol __ICFEDIT_region_EROM3_start__ = 0x0;
+define symbol __ICFEDIT_region_EROM3_end__   = 0x0;
+define symbol __ICFEDIT_region_IRAM1_start__ = 0x20000000;
+define symbol __ICFEDIT_region_IRAM1_end__   = 0x20081FFF;
+define symbol __ICFEDIT_region_IRAM2_start__ = 0x0;
+define symbol __ICFEDIT_region_IRAM2_end__   = 0x0;
+define symbol __ICFEDIT_region_ERAM1_start__ = 0x0;
+define symbol __ICFEDIT_region_ERAM1_end__   = 0x0;
+define symbol __ICFEDIT_region_ERAM2_start__ = 0x0;
+define symbol __ICFEDIT_region_ERAM2_end__   = 0x0;
+define symbol __ICFEDIT_region_ERAM3_start__ = 0x0;
+define symbol __ICFEDIT_region_ERAM3_end__   = 0x0;
+/*-Sizes-*/
+define symbol __ICFEDIT_size_cstack__        = 0x400;
+define symbol __ICFEDIT_size_proc_s_stack__  = 0x0;
+define symbol __ICFEDIT_size_main_ns_stack__ = 0x0;
+define symbol __ICFEDIT_size_proc_ns_stack__ = 0x0;
+define symbol __ICFEDIT_size_heap__          = 0x800;
+/**** End of ICF editor section. ###ICF###*/
+
+build for ram;
+define memory mem with size = 4G;
+
+define region IROM_region =  mem:[from __ICFEDIT_region_IROM1_start__ to __ICFEDIT_region_IROM1_end__];
+define region IRAM_region =  mem:[from __ICFEDIT_region_IRAM1_start__ to __ICFEDIT_region_IRAM1_end__];
+
+place at address mem:0x20000000 { readonly section .intvec };
+
+place in IRAM_region  { readonly };
+
+define block CSTACK        with alignment = 8, size = __ICFEDIT_size_cstack__        { };
+define block PROC_STACK_S  with alignment = 8, size = __ICFEDIT_size_proc_s_stack__  { };
+define block MAIN_STACK_NS with alignment = 8, size = __ICFEDIT_size_main_ns_stack__ { };
+define block PROC_STACK_NS with alignment = 8, size = __ICFEDIT_size_proc_ns_stack__ { };
+define block HEAP          with alignment = 8, size = __ICFEDIT_size_heap__          { };
+place in IRAM_region  { readwrite, block CSTACK, block PROC_STACK_S, block MAIN_STACK_NS, block PROC_STACK_NS, block HEAP };
